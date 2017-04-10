@@ -229,7 +229,7 @@ class DataRetrieverManagerTest extends WordSpec with Matchers with MockitoSugar 
 
     dataRetriever.start()
     var i = 100
-    while(i > 0){
+    while (i > 0) {
       i -= 1
       val records = dataRetriever.getRecords
       println(s"i=$i => Records ${records.size()}")
@@ -251,7 +251,7 @@ class DataRetrieverManagerTest extends WordSpec with Matchers with MockitoSugar 
 
     dataRetriever.start()
     var i = 100
-    while(i > 0){
+    while (i > 0) {
       i -= 1
       val records = dataRetriever.getRecords
       println(s"i=$i => Records ${records.size()}")
@@ -274,7 +274,7 @@ class DataRetrieverManagerTest extends WordSpec with Matchers with MockitoSugar 
 
     dataRetriever.start()
     var i = 100
-    while(i > 0){
+    while (i > 0) {
       i -= 1
       val records = dataRetriever.getRecords
       println(s"i=$i => Records ${records.size()}")

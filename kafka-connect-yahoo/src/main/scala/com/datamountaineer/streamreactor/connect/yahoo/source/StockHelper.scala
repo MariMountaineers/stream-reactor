@@ -46,7 +46,48 @@ object StockHelper {
     }
   }
 
-  private def getOffset() = Collections.singletonMap("position", System.currentTimeMillis())
+  def getStockSchema: Schema = {
+
+    val builder = SchemaBuilder.struct
+    builder
+      .name("yahooStock")
+      .doc("Avro record for Yahoo stocks.")
+      .field("currency", Schema.OPTIONAL_STRING_SCHEMA)
+      .field("name", Schema.OPTIONAL_STRING_SCHEMA)
+      .field("stock_exchange", Schema.OPTIONAL_STRING_SCHEMA)
+      .field("symbol", Schema.OPTIONAL_STRING_SCHEMA)
+      .field("annual_yield", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("annual_yield_percentage", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("ex_date", Schema.OPTIONAL_INT64_SCHEMA)
+      .field("pay_date", Schema.OPTIONAL_INT64_SCHEMA)
+      .field("ask", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("ask_size", Schema.OPTIONAL_INT32_SCHEMA)
+      .field("ask_avg_volume", Schema.OPTIONAL_INT64_SCHEMA)
+      .field("bid", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("bid_size", Schema.OPTIONAL_INT32_SCHEMA)
+      .field("change", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("change_percentage", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("change_from_avg50", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("change_from_avg50_percentage", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("change_from_year_high", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("change_from_year_high_percentage", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("change_from_year_low", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("change_from_year_low_percentage", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("day_high", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("day_low", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("last_trade_size", Schema.OPTIONAL_INT32_SCHEMA)
+      .field("last_trade_time", Schema.OPTIONAL_INT64_SCHEMA)
+      .field("open", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("previous_close", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("price", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("price_avg50", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("price_avg200", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("volume", Schema.OPTIONAL_INT64_SCHEMA)
+      .field("year_high", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("year_low", Schema.OPTIONAL_FLOAT64_SCHEMA)
+      .field("history", SchemaBuilder.array(getStockHistoricalSchema).optional().build())
+    builder.build()
+  }
 
 
   implicit class StockToSourceRecordConverter(val stock: Stock) extends AnyVal {
@@ -145,49 +186,6 @@ object StockHelper {
     builderHistory.build()
   }
 
-  def getStockSchema: Schema = {
-
-    val builder = SchemaBuilder.struct
-    builder
-      .name("yahooStock")
-      .doc("Avro record for Yahoo stocks.")
-      .field("currency", Schema.OPTIONAL_STRING_SCHEMA)
-      .field("name", Schema.OPTIONAL_STRING_SCHEMA)
-      .field("stock_exchange", Schema.OPTIONAL_STRING_SCHEMA)
-      .field("symbol", Schema.OPTIONAL_STRING_SCHEMA)
-      .field("annual_yield", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("annual_yield_percentage", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("ex_date", Schema.OPTIONAL_INT64_SCHEMA)
-      .field("pay_date", Schema.OPTIONAL_INT64_SCHEMA)
-      .field("ask", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("ask_size", Schema.OPTIONAL_INT32_SCHEMA)
-      .field("ask_avg_volume", Schema.OPTIONAL_INT64_SCHEMA)
-      .field("bid", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("bid_size", Schema.OPTIONAL_INT32_SCHEMA)
-      .field("change", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("change_percentage", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("change_from_avg50", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("change_from_avg50_percentage", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("change_from_year_high", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("change_from_year_high_percentage", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("change_from_year_low", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("change_from_year_low_percentage", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("day_high", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("day_low", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("last_trade_size", Schema.OPTIONAL_INT32_SCHEMA)
-      .field("last_trade_time", Schema.OPTIONAL_INT64_SCHEMA)
-      .field("open", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("previous_close", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("price", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("price_avg50", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("price_avg200", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("volume", Schema.OPTIONAL_INT64_SCHEMA)
-      .field("year_high", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("year_low", Schema.OPTIONAL_FLOAT64_SCHEMA)
-      .field("history", SchemaBuilder.array(getStockHistoricalSchema).optional().build())
-    builder.build()
-  }
-
   def getFxSchema: Schema = {
     SchemaBuilder.struct()
       .name("yahooFX")
@@ -196,6 +194,8 @@ object StockHelper {
       .field("price", Schema.OPTIONAL_FLOAT64_SCHEMA)
       .build()
   }
+
+  private def getOffset() = Collections.singletonMap("position", System.currentTimeMillis())
 }
 
 
