@@ -24,12 +24,10 @@ object HazelCastSinkConfigConstants {
   val CLUSTER_SOURCE_MEMBERS = "connect.hazelcast.source.cluster.members"
   val CLUSTER_SINK_MEMBERS = "connect.hazelcast.sink.cluster.members"
   val CLUSTER_MEMBERS_DOC: String =
-    """
-      |Address List is the initial list of cluster addresses to which the client will connect.
+    """Address List is the initial list of cluster addresses to which the client will connect.
       |The client uses this list to find an alive node. Although it may be enough to give only one
       |address of a node in the cluster (since all nodes communicate with each other),
-      |it is recommended that you give the addresses for all the nodes.
-    """.stripMargin
+      |it is recommended that you give the addresses for all the nodes.""".stripMargin
   val CLUSTER_MEMBERS_DEFAULT = "localhost"
 
   val SINK_GROUP_NAME = "connect.hazelcast.sink.group.name"
