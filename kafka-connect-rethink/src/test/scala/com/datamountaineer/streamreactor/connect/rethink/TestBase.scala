@@ -18,7 +18,7 @@ package com.datamountaineer.streamreactor.connect.rethink
 
 import java.util
 
-import com.datamountaineer.streamreactor.connect.rethink.config.{ReThinkSinkConfig, ReThinkSourceConfig}
+import com.datamountaineer.streamreactor.connect.rethink.config.{ReThinkSinkConfig, ReThinkSinkConfigConstants, ReThinkSourceConfig}
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.record.TimestampType
 import org.apache.kafka.connect.data.{Schema, SchemaBuilder, Struct}
@@ -52,9 +52,9 @@ trait TestBase  extends WordSpec with Matchers with BeforeAndAfter {
   ASSIGNMENT.add(TOPIC_PARTITION)
 
   def getProps: util.Map[String, String] = {
-    Map(ReThinkSinkConfig.EXPORT_ROUTE_QUERY->ROUTE,
-      ReThinkSinkConfig.RETHINK_HOST->"localhost",
-      ReThinkSinkConfig.RETHINK_DB->DB).asJava
+    Map(ReThinkSinkConfigConstants.EXPORT_ROUTE_QUERY->ROUTE,
+      ReThinkSinkConfigConstants.RETHINK_HOST->"localhost",
+      ReThinkSinkConfigConstants.RETHINK_DB->DB).asJava
   }
 
   def getPropsSource: util.Map[String, String] = {
@@ -76,10 +76,10 @@ trait TestBase  extends WordSpec with Matchers with BeforeAndAfter {
   }
 
   def getPropsUpsertSelectRetry: util.Map[String, String] = {
-    Map(ReThinkSinkConfig.EXPORT_ROUTE_QUERY->ROUTE_SELECT_UPSERT,
-      ReThinkSinkConfig.RETHINK_HOST->"localhost",
-      ReThinkSinkConfig.RETHINK_DB->DB,
-      ReThinkSinkConfig.ERROR_POLICY->"RETRY").asJava
+    Map(ReThinkSinkConfigConstants.EXPORT_ROUTE_QUERY->ROUTE_SELECT_UPSERT,
+      ReThinkSinkConfigConstants.RETHINK_HOST->"localhost",
+      ReThinkSinkConfigConstants.RETHINK_DB->DB,
+      ReThinkSinkConfigConstants.ERROR_POLICY->"RETRY").asJava
   }
 
 
