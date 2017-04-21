@@ -74,5 +74,5 @@ case class ReThinkSinkConfig(props: util.Map[String, String])
   override val numberRetriesConstant: String = ReThinkSinkConfigConstants.NBR_OF_RETRIES
   override val batchSizeConstant: String = ReThinkSinkConfigConstants.BATCH_SIZE
   override val databaseConstant: String = ReThinkSinkConfigConstants.RETHINK_DB
-  override val retryIntervalConstant:String = ReThinkSinkConfigConstants.ERROR_RETRY_INTERVAL
+  override val retryIntervalConstant: String = ReThinkSinkConfigConstants.ERROR_RETRY_INTERVAL
 }

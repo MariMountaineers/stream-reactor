@@ -83,6 +83,3 @@ object ReThinkSinkSettings {
       batchSize)
   }
 }
-
-
-
