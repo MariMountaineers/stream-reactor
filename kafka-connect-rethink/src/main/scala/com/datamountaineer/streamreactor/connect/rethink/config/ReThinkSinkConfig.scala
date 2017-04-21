@@ -67,7 +67,8 @@ case class ReThinkSinkConfig(props: util.Map[String, String])
     with NumberRetriesSettings
     with KcqlSettings
     with BatchSizeSettings
-    with DatabaseSettings {
+    with DatabaseSettings
+    with RetryIntervalSettings {
   override val errorPolicyConstant: String = ReThinkSinkConfigConstants.ERROR_POLICY
   override val kcqlConstant: String = ReThinkSinkConfigConstants.EXPORT_ROUTE_QUERY
   override val numberRetriesConstant: String = ReThinkSinkConfigConstants.NBR_OF_RETRIES
