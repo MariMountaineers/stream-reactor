@@ -26,11 +26,10 @@ case class ReThinkSourceSettings(db: String,
                                  routes: Set[Config],
                                  tableTopicMap: Map[String, String])
 
-
 object ReThinkSourceSettings {
   def apply(config: ReThinkSourceConfig): ReThinkSourceSettings = {
     val routes = config.getRoutes
-    val tableTopicMap = routes.map(rm => (rm.getSource, rm.getTarget)).toMap
+    val tableTopicMap = config.getTableTopic(routes)
     val db = config.getDatabase
     ReThinkSourceSettings(db, routes, tableTopicMap)
   }

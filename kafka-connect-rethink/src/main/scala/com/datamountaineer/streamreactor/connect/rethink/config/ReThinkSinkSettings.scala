@@ -26,12 +26,12 @@ import scala.collection.JavaConversions._
   * Created by andrew@datamountaineer.com on 13/05/16.
   * stream-reactor-maven
   */
-case class ReThinkSinkSetting(db: String,
+case class ReThinkSinkSetting(database: String,
                               routes: Set[Config],
                               topicTableMap: Map[String, String],
                               fieldMap: Map[String, Map[String, String]],
                               ignoreFields: Map[String, Set[String]],
-                              pks: Map[String, Set[String]],
+                              primaryKeys: Map[String, Set[String]],
                               conflictPolicy: Map[String, String],
                               errorPolicy: ErrorPolicy = new ThrowErrorPolicy,
                               maxRetries: Int,
@@ -60,22 +60,22 @@ object ReThinkSinkSettings {
       })
     }).toMap
 
-    val topicTableMap = routes.map(rm => (rm.getSource, rm.getTarget)).toMap
+    val tableTopicMap = config.getTableTopic()
 
     val fieldMap = config.getFields(routes)
 
-    val db = config.getDatabase
-    val p = routes.map(r => (r.getSource, r.getPrimaryKeys.toSet)).toMap
+    val database = config.getDatabase
+    val primaryKeys = config.getPrimaryKeys(routes)
     val ignoreFields = config.getIgnoreFields(routes)
     val retry = config.getInt(ReThinkSinkConfigConstants.ERROR_RETRY_INTERVAL).toLong
 
     ReThinkSinkSetting(
-      db,
+      database,
       routes,
-      topicTableMap,
+      tableTopicMap,
       fieldMap,
       ignoreFields,
-      p,
+      primaryKeys,
       conflictMap,
       errorPolicy,
       maxRetries,
