@@ -67,7 +67,7 @@ object ReThinkSinkSettings {
     val database = config.getDatabase
     val primaryKeys = config.getPrimaryKeys(routes)
     val ignoreFields = config.getIgnoreFields(routes)
-    val retry = config.getInt(ReThinkSinkConfigConstants.ERROR_RETRY_INTERVAL).toLong
+    val retryInterval = config.getRetryInterval.toLong
 
     ReThinkSinkSetting(
       database,
@@ -79,7 +79,7 @@ object ReThinkSinkSettings {
       conflictMap,
       errorPolicy,
       maxRetries,
-      retry,
+      retryInterval,
       batchSize)
   }
 }
