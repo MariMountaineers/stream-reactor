@@ -64,7 +64,7 @@ object ReThinkSinkSettings {
 
     val fieldMap = config.getFields(routes)
 
-    val db = config.getString(ReThinkSinkConfigConstants.RETHINK_DB)
+    val db = config.getDatabase
     val p = routes.map(r => (r.getSource, r.getPrimaryKeys.toSet)).toMap
     val ignoreFields = config.getIgnoreFields(routes)
     val retry = config.getInt(ReThinkSinkConfigConstants.ERROR_RETRY_INTERVAL).toLong

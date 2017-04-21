@@ -31,7 +31,7 @@ object ReThinkSourceSettings {
   def apply(config: ReThinkSourceConfig): ReThinkSourceSettings = {
     val routes = config.getRoutes
     val tableTopicMap = routes.map(rm => (rm.getSource, rm.getTarget)).toMap
-    val db = config.getString(ReThinkSourceConfigConstants.RETHINK_DB)
+    val db = config.getDatabase
     ReThinkSourceSettings(db, routes, tableTopicMap)
   }
 }
