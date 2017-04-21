@@ -19,7 +19,7 @@ trait KcqlSettings extends BaseSettings {
   }
 
   def getIgnoreFields(routes: Set[Config] = getRoutes): Map[String, Set[String]] = {
-    routes.map(rm => (rm.getSource, rm.getIgnoredField.toSet)).toMap
+    routes.map(r => (r.getSource, r.getIgnoredField.toSet)).toMap
   }
 
   def getPrimaryKeys(routes: Set[Config] = getRoutes): Map[String, Set[String]] = {
@@ -27,7 +27,7 @@ trait KcqlSettings extends BaseSettings {
   }
 
   def getTableTopic(routes: Set[Config] = getRoutes): Map[String, String] = {
-    routes.map(rm => (rm.getSource, rm.getTarget)).toMap
+    routes.map(r => (r.getSource, r.getTarget)).toMap
   }
 
   def getFormat(formatType: FormatType => FormatType, routes: Set[Config] = getRoutes): Map[String, FormatType] = {
