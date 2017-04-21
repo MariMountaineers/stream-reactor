@@ -25,9 +25,7 @@ import com.datamountaineer.streamreactor.connect.errors.{ErrorPolicy, ThrowError
 import com.datastax.driver.core.ConsistencyLevel
 import com.typesafe.scalalogging.slf4j.StrictLogging
 import org.apache.kafka.common.config.ConfigException
-
-import scala.collection.JavaConversions._
-
+import scala.collection.JavaConversions.asScalaIterator
 
 
 /**
@@ -67,7 +65,7 @@ case class CassandraSinkSetting(keySpace: String,
   * Holds the table, topic, import mode and timestamp columns
   * Import mode and timestamp columns are only applicable for the source.
   **/
-object CassandraSettings extends StrictLogging  {
+object CassandraSettings extends StrictLogging {
 
   def configureSource(config: CassandraConfigSource): Set[CassandraSourceSetting] = {
     //get keyspace
@@ -82,7 +80,7 @@ object CassandraSettings extends StrictLogging  {
     }
 
 
-    val consistencyLevel = config.getConsistencyLevel(classOf[ConsistencyLevel])
+    val consistencyLevel = config.getConsistencyLevel
 
     val timestampType = TimestampType.withName(config.getString(CassandraConfigConstants.TIMESTAMP_TYPE).toUpperCase)
 
@@ -125,9 +123,9 @@ object CassandraSettings extends StrictLogging  {
     val fields = config.getFields(routes)
     val ignoreFields = config.getIgnoreFields(routes)
 
-    val threadPoolSize: Int = config.getThreadPoolSize
+    val threadPoolSize = config.getThreadPoolSize
 
-    val consistencyLevel = config.getConsistencyLevel(classOf[ConsistencyLevel])
+    val consistencyLevel = config.getConsistencyLevel
 
     CassandraSinkSetting(keySpace, routes, fields, ignoreFields, errorPolicy, threadPoolSize, consistencyLevel, retries)
   }
