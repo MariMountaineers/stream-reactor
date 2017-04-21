@@ -27,7 +27,6 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 import org.apache.kafka.common.config.ConfigException
 
 import scala.collection.JavaConversions._
-import scala.util.{Failure, Success, Try}
 
 
 
@@ -83,15 +82,7 @@ object CassandraSettings extends StrictLogging  {
     }
 
 
-
-    val consistencyLevel = config.getString(CassandraConfigConstants.CONSISTENCY_LEVEL_CONFIG) match {
-      case "" => None
-      case other =>
-        Try(ConsistencyLevel.valueOf(other)) match {
-          case Failure(e) => throw new ConfigException(s"'$other' is not a valid ${CassandraConfigConstants.CONSISTENCY_LEVEL_CONFIG}. Available values are:${ConsistencyLevel.values().map(_.name()).mkString(",")}")
-          case Success(cl) => Some(cl)
-        }
-    }
+    val consistencyLevel = config.getConsistencyLevel(classOf[ConsistencyLevel])
 
     val timestampType = TimestampType.withName(config.getString(CassandraConfigConstants.TIMESTAMP_TYPE).toUpperCase)
 
@@ -134,20 +125,9 @@ object CassandraSettings extends StrictLogging  {
     val fields = config.getFields(routes)
     val ignoreFields = config.getIgnoreFields(routes)
 
-    val threadPoolSize: Int = {
-      val threads = config.getInt(CassandraConfigConstants.SINK_THREAD_POOL_CONFIG)
-      if (threads <= 0) 4 * Runtime.getRuntime.availableProcessors()
-      else threads
-    }
+    val threadPoolSize: Int = config.getThreadPoolSize
 
-    val consistencyLevel = config.getString(CassandraConfigConstants.CONSISTENCY_LEVEL_CONFIG) match {
-      case "" => None
-      case other =>
-        Try(ConsistencyLevel.valueOf(other)) match {
-          case Failure(e) => throw new ConfigException(s"'$other' is not a valid ${CassandraConfigConstants.CONSISTENCY_LEVEL_CONFIG}. Available values are:${ConsistencyLevel.values().map(_.name()).mkString(",")}")
-          case Success(cl) => Some(cl)
-        }
-    }
+    val consistencyLevel = config.getConsistencyLevel(classOf[ConsistencyLevel])
 
     CassandraSinkSetting(keySpace, routes, fields, ignoreFields, errorPolicy, threadPoolSize, consistencyLevel, retries)
   }

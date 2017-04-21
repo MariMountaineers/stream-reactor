@@ -18,7 +18,7 @@ package com.datamountaineer.streamreactor.connect.cassandra.config
 
 import java.util
 
-import com.datamountaineer.streamreactor.temp.{ErrorPolicySettings, KcqlSettings, NumberRetriesSettings}
+import com.datamountaineer.streamreactor.temp._
 import org.apache.kafka.common.config.ConfigDef.{Importance, Type}
 import org.apache.kafka.common.config.{AbstractConfig, ConfigDef}
 
@@ -293,9 +293,11 @@ object CassandraConfigSource {
 case class CassandraConfigSource(props: util.Map[String, String])
   extends AbstractConfig(CassandraConfigSource.sourceConfig, props)
     with ErrorPolicySettings
-    with KcqlSettings {
+    with KcqlSettings
+    with ConsistencyLevelSettings {
   override val errorPolicyConstant: String = CassandraConfigConstants.ERROR_POLICY
   override val kcqlConstant: String = CassandraConfigConstants.SOURCE_KCQL_QUERY
+  override val consistencyLevelConstant: String = CassandraConfigConstants.CONSISTENCY_LEVEL_CONFIG
 }
 
 /**
@@ -329,8 +331,12 @@ case class CassandraConfigSink(props: util.Map[String, String])
   extends AbstractConfig(CassandraConfigSink.sinkConfig, props)
     with ErrorPolicySettings
     with NumberRetriesSettings
-    with KcqlSettings {
+    with KcqlSettings
+    with ThreadPoolSettings
+    with ConsistencyLevelSettings {
   override val errorPolicyConstant: String = CassandraConfigConstants.ERROR_POLICY
   override val kcqlConstant: String = CassandraConfigConstants.SINK_KCQL
   override val numberRetriesConstant: String = CassandraConfigConstants.NBR_OF_RETRIES
+  override val threadPoolConstant: String = CassandraConfigConstants.SINK_THREAD_POOL_CONFIG
+  override val consistencyLevelConstant: String = CassandraConfigConstants.CONSISTENCY_LEVEL_CONFIG
 }
