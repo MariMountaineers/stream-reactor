@@ -82,7 +82,7 @@ object HazelCastSinkSettings {
   }
 
   private def ensureGroupNameExists(config: HazelCastSinkConfig): Unit = {
-    val groupName: String = config.getString(HazelCastSinkConfigConstants.SINK_GROUP_NAME)
+    val groupName = config.getString(HazelCastSinkConfigConstants.SINK_GROUP_NAME)
     require(groupName.nonEmpty, s"No ${HazelCastSinkConfigConstants.SINK_GROUP_NAME} provided!")
   }
 

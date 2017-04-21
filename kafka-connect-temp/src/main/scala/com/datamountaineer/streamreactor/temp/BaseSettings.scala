@@ -1,6 +1,5 @@
 package com.datamountaineer.streamreactor.temp
 
-
 trait BaseSettings {
   def getString(key: String): String
 
