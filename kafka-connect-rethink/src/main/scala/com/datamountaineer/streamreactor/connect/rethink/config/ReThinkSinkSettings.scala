@@ -47,7 +47,7 @@ object ReThinkSinkSettings {
       .filter(r => r.getPrimaryKeys.size > 1)
       .foreach(_ => new ConnectException(
         s"""More than one primary key found in ${ReThinkSinkConfigConstants.EXPORT_ROUTE_QUERY}.
-           |Only one field can be set.""".stripMargin))
+           |Only one field can be set.""".stripMargin.replaceAll("\n","")))
     val errorPolicy = config.getErrorPolicy
     val maxRetries = config.getNumberRetries
     val batchSize = config.getBatchSize
@@ -60,7 +60,7 @@ object ReThinkSinkSettings {
       })
     }).toMap
 
-    val tableTopicMap = config.getTableTopic()
+    val tableTopicMap = config.getTableTopic(routes)
 
     val fieldMap = config.getFields(routes)
 
