@@ -68,15 +68,28 @@ object HazelCastSinkSettings {
     val connConfig = HazelCastConnectionConfig(config)
     val client = HazelCastConnection.buildClient(connConfig)
 
-    new HazelCastSinkSettings(client, routes, topicTables, fieldMap, ignoreFields, primaryKeys, errorPolicy, maxRetries, format, threadPoolSize, allowParallel)
+    new HazelCastSinkSettings(
+      client,
+      routes, topicTables,
+      fieldMap,
+      ignoreFields,
+      primaryKeys,
+      errorPolicy,
+      maxRetries,
+      format,
+      threadPoolSize,
+      allowParallel
+    )
   }
 
 
   private def getTopicTables(routes: Set[Config]): Map[String, HazelCastStoreAsType] = {
     routes.map(r => {
       Try(TargetType.withName(r.getStoredAs.toUpperCase)) match {
-        case Success(_) => (r.getSource, HazelCastStoreAsType(r.getTarget, TargetType.withName(r.getStoredAs.toUpperCase)))
-        case Failure(_) => (r.getSource, HazelCastStoreAsType(r.getTarget, TargetType.RELIABLE_TOPIC))
+        case Success(_) =>
+          (r.getSource, HazelCastStoreAsType(r.getTarget, TargetType.withName(r.getStoredAs.toUpperCase)))
+        case Failure(_) =>
+          (r.getSource, HazelCastStoreAsType(r.getTarget, TargetType.RELIABLE_TOPIC))
       }
     }).toMap
   }
