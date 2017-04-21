@@ -17,7 +17,7 @@
 package com.datamountaineer.streamreactor.connect.rethink.config
 
 import com.datamountaineer.connector.config.{Config, WriteModeEnum}
-import com.datamountaineer.streamreactor.connect.errors.{ErrorPolicy, ErrorPolicyEnum, ThrowErrorPolicy}
+import com.datamountaineer.streamreactor.connect.errors.{ErrorPolicy, ThrowErrorPolicy}
 import org.apache.kafka.connect.errors.ConnectException
 
 import scala.collection.JavaConversions._
@@ -36,21 +36,21 @@ case class ReThinkSinkSetting(db: String,
                               errorPolicy: ErrorPolicy = new ThrowErrorPolicy,
                               maxRetries: Int,
                               retryInterval: Long,
-                              batchSize: Int
-                             )
+                              batchSize: Int)
 
 object ReThinkSinkSettings {
   def apply(config: ReThinkSinkConfig): ReThinkSinkSetting = {
     val routes = config.getRoutes
 
-    //only allow on primary key for rethink.
+    //only allow one primary key for rethink.
     routes
       .filter(r => r.getPrimaryKeys.size > 1)
-      .foreach(_ => new ConnectException(s"More than one primary key found in ${ReThinkSinkConfigConstants.EXPORT_ROUTE_QUERY}." +
-        s" Only one field can be set."))
+      .foreach(_ => new ConnectException(
+        s"""More than one primary key found in ${ReThinkSinkConfigConstants.EXPORT_ROUTE_QUERY}.
+           |Only one field can be set.""".stripMargin))
     val errorPolicy = config.getErrorPolicy
     val maxRetries = config.getNumberRetries
-    val batchSize = config.getInt(ReThinkSinkConfigConstants.BATCH_SIZE)
+    val batchSize = config.getBatchSize
 
     //check conflict policy
     val conflictMap = routes.map(m => {
@@ -69,7 +69,18 @@ object ReThinkSinkSettings {
     val ignoreFields = config.getIgnoreFields(routes)
     val retry = config.getInt(ReThinkSinkConfigConstants.ERROR_RETRY_INTERVAL).toLong
 
-    ReThinkSinkSetting(db, routes, topicTableMap, fieldMap, ignoreFields, p, conflictMap, errorPolicy, maxRetries, retry, batchSize)
+    ReThinkSinkSetting(
+      db,
+      routes,
+      topicTableMap,
+      fieldMap,
+      ignoreFields,
+      p,
+      conflictMap,
+      errorPolicy,
+      maxRetries,
+      retry,
+      batchSize)
   }
 }
 
