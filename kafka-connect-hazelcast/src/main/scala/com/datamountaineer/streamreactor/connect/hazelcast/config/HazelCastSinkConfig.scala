@@ -70,7 +70,7 @@ class HazelCastSinkConfig(props: util.Map[String, String])
     with KcqlSettings
     with NumberRetriesSettings
     with ThreadPoolSettings
-with AllowParallelizationSettings{
+    with AllowParallelizationSettings {
   override val errorPolicyConstant: String = HazelCastSinkConfigConstants.ERROR_POLICY
   override val kcqlConstant: String = HazelCastSinkConfigConstants.EXPORT_ROUTE_QUERY
   override val numberRetriesConstant: String = HazelCastSinkConfigConstants.NBR_OF_RETRIES
