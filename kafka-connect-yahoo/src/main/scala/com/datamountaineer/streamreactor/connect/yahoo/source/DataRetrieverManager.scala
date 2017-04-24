@@ -46,8 +46,8 @@ case class DataRetrieverManager(dataRetriever: FinanceDataRetriever,
   private val queue = new ArrayBlockingQueue[SourceRecord](bufferSize, true)
   private val latch = new CountDownLatch(workers)
   private val latchStart = new CountDownLatch(workers)
-  @volatile private var poll = true
   private val threadPool = Executors.newFixedThreadPool(workers)
+  @volatile private var poll = true
 
   def getRecords: java.util.List[SourceRecord] = {
     val recs = new util.ArrayList[SourceRecord]()
@@ -80,27 +80,6 @@ case class DataRetrieverManager(dataRetriever: FinanceDataRetriever,
     logger.info("DataRetrieverManager started")
   }
 
-  override def close(): Unit = {
-    poll = false
-    latch.await()
-    threadPool.shutdownNow()
-    Try(threadPool.awaitTermination(5000, TimeUnit.MILLISECONDS))
-  }
-
-  private def addFx(fx: Seq[FxQuote]) = {
-    fx.foreach { q =>
-      val record = q.toSourceRecord(fxKafkaTopic.get)
-      queue.put(record)
-    }
-  }
-
-  private def addStocks(stocks: Seq[Stock]) = {
-    stocks.foreach { s =>
-      val record = s.toSourceRecord(stocksKafkaTopic.get)
-      queue.put(record)
-    }
-  }
-
   private def startQuotesWorker(): Unit = {
     threadPool.submit {
       latchStart.countDown()
@@ -119,6 +98,13 @@ case class DataRetrieverManager(dataRetriever: FinanceDataRetriever,
       }
 
       latch.countDown()
+    }
+  }
+
+  private def addFx(fx: Seq[FxQuote]) = {
+    fx.foreach { q =>
+      val record = q.toSourceRecord(fxKafkaTopic.get)
+      queue.put(record)
     }
   }
 
@@ -141,6 +127,20 @@ case class DataRetrieverManager(dataRetriever: FinanceDataRetriever,
 
       latch.countDown()
     }
+  }
+
+  private def addStocks(stocks: Seq[Stock]) = {
+    stocks.foreach { s =>
+      val record = s.toSourceRecord(stocksKafkaTopic.get)
+      queue.put(record)
+    }
+  }
+
+  override def close(): Unit = {
+    poll = false
+    latch.await()
+    threadPool.shutdownNow()
+    Try(threadPool.awaitTermination(5000, TimeUnit.MILLISECONDS))
   }
 }
 
