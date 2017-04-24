@@ -63,10 +63,19 @@ trait TestBase extends WordSpec with BeforeAndAfter with Matchers {
   val KEYSTORE_PASS = "endPass"
   val TRUSTSTORE_PASS = "rootPass"
 
-  val TRUSTSTORE_PATH = System.getProperty("truststore")
-  val KEYSTORE_PATH = System.getProperty("keystore")
-//  val KEYSTORE_PATH: String =  getClass.getResource("/certs2/keyStore.jks").getPath
-//  val TRUSTSTORE_PATH: String = getClass.getResource("/certs2/trustStore.jks").getPath
+  // Fixes a bug when running the TestCoapSink testsuite independently
+  val TRUSTSTORE_PATH: String = {
+    if (System.getProperty("truststore") == null)
+      getClass.getResource("/certs2/trustStore.jks").getPath
+    else
+      System.getProperty("truststore")
+  }
+  val KEYSTORE_PATH: String = {
+    if (System.getProperty("keystore") == null)
+      getClass.getResource("/certs2/keyStore.jks").getPath
+    else
+      System.getProperty("keystore")
+  }
 
   protected val PARTITION: Int = 12
   protected val TOPIC_PARTITION: TopicPartition = new TopicPartition(TOPIC, PARTITION)
