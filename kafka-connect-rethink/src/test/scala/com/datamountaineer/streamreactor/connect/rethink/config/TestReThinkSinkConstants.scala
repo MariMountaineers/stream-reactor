@@ -21,7 +21,7 @@ import com.datamountaineer.streamreactor.connect.rethink.TestBase
 /**
   * The point of this test is to check that constants keys are not changed after the refactor of the code.
   */
-class TestReThinkConstants extends TestBase {
+class TestReThinkSinkConstants extends TestBase {
 
   // Constants
   val RETHINK_HOST = "connect.rethink.sink.host"
