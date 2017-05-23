@@ -33,35 +33,35 @@ class TestReThinkSinkConstants extends TestBase {
   val NBR_OF_RETRIES = "connect.rethink.max.retries"
   val BATCH_SIZE = "connect.rethink.batch.size"
 
-  "RETHINK_HOST should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "RETHINK_HOST should have the same key in ReThinkSinkConfigConstants" in {
     assert(RETHINK_HOST.equals(ReThinkSinkConfigConstants.RETHINK_HOST))
   }
 
-  "RETHINK_DB should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "RETHINK_DB should have the same key in ReThinkSinkConfigConstants" in {
     assert(RETHINK_DB.equals(ReThinkSinkConfigConstants.RETHINK_DB))
   }
 
-  "RETHINK_PORT should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "RETHINK_PORT should have the same key in ReThinkSinkConfigConstants" in {
     assert(RETHINK_PORT.equals(ReThinkSinkConfigConstants.RETHINK_PORT))
   }
 
-  "EXPORT_ROUTE_QUERY should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "EXPORT_ROUTE_QUERY should have the same key in ReThinkSinkConfigConstants" in {
     assert(EXPORT_ROUTE_QUERY.equals(ReThinkSinkConfigConstants.EXPORT_ROUTE_QUERY))
   }
 
-  "ERROR_POLICY should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "ERROR_POLICY should have the same key in ReThinkSinkConfigConstants" in {
     assert(ERROR_POLICY.equals(ReThinkSinkConfigConstants.ERROR_POLICY))
   }
 
-  "ERROR_RETRY_INTERVAL should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "ERROR_RETRY_INTERVAL should have the same key in ReThinkSinkConfigConstants" in {
     assert(ERROR_RETRY_INTERVAL.equals(ReThinkSinkConfigConstants.ERROR_RETRY_INTERVAL))
   }
 
-  "NBR_OF_RETRIES should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "NBR_OF_RETRIES should have the same key in ReThinkSinkConfigConstants" in {
     assert(NBR_OF_RETRIES.equals(ReThinkSinkConfigConstants.NBR_OF_RETRIES))
   }
 
-  "BATCH_SIZE should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "BATCH_SIZE should have the same key in ReThinkSinkConfigConstants" in {
     assert(BATCH_SIZE.equals(ReThinkSinkConfigConstants.BATCH_SIZE))
   }
 }

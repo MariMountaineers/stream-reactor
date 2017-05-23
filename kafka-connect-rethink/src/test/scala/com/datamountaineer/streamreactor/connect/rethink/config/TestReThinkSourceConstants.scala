@@ -29,19 +29,19 @@ class TestReThinkSourceConstants extends TestBase {
   val RETHINK_PORT ="connect.rethink.source.port"
   val IMPORT_ROUTE_QUERY ="connect.rethink.kcql"
 
-  "RETHINK_HOST should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "RETHINK_HOST should have the same key in ReThinkSinkConfigConstants" in {
     assert(RETHINK_HOST.equals(ReThinkSourceConfigConstants.RETHINK_HOST))
   }
 
-  "RETHINK_DB should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "RETHINK_DB should have the same key in ReThinkSinkConfigConstants" in {
     assert(RETHINK_DB.equals(ReThinkSourceConfigConstants.RETHINK_DB))
   }
 
-  "RETHINK_PORT should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "RETHINK_PORT should have the same key in ReThinkSinkConfigConstants" in {
     assert(RETHINK_PORT.equals(ReThinkSourceConfigConstants.RETHINK_PORT))
   }
 
-  "EXPORT_ROUTE_QUERY should be equals to the same key in ReThinkSinkConfigConstants" in {
+  "EXPORT_ROUTE_QUERY should have the same key in ReThinkSinkConfigConstants" in {
     assert(IMPORT_ROUTE_QUERY.equals(ReThinkSourceConfigConstants.IMPORT_ROUTE_QUERY))
   }
 }
