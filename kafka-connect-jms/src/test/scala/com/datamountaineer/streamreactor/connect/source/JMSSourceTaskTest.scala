@@ -28,7 +28,7 @@ import org.apache.activemq.broker.BrokerService
 import scala.collection.JavaConverters._
 
 /**
-  * Created by andrew@datamountaineer.com on 24/03/2017. 
+  * Created by andrew@datamountaineer.com on 24/03/2017.
   * stream-reactor
   */
 class JMSSourceTaskTest extends TestBase {
@@ -56,15 +56,17 @@ class JMSSourceTaskTest extends TestBase {
     connectionFactory.setBrokerURL(brokerUrl)
     val conn = connectionFactory.createConnection()
     conn.start()
-    val session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE)
+    val session = conn.createSession(true, Session.SESSION_TRANSACTED)
     val queue = session.createQueue(QUEUE1)
     val queueProducer = session.createProducer(queue)
-    val messages = getTextMessages(10, session)
+    val numberMessages = 10
+    val messages = getTextMessages(numberMessages, session)
     messages.foreach(m => queueProducer.send(m))
-
+    session.commit()
     val records = task.poll().asScala
-    records.size shouldBe 10
-
+    records.size shouldBe numberMessages
+    // after first read, the queue should be empty
+    task.poll().asScala.size shouldBe 0
     records.head.valueSchema().toString shouldBe JMSStructMessage.getSchema().toString
     task.stop()
   }
