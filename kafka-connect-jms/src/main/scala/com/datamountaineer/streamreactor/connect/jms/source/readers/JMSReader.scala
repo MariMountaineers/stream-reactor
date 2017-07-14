@@ -16,7 +16,7 @@
 
 package com.datamountaineer.streamreactor.connect.jms.source.readers
 
-import javax.jms.{Message, MessageConsumer, Session}
+import javax.jms.{Message, MessageConsumer}
 
 import com.datamountaineer.streamreactor.connect.converters.source.Converter
 import com.datamountaineer.streamreactor.connect.jms.JMSSessionProvider
