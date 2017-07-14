@@ -42,6 +42,8 @@ class JMSReader(settings: JMSSettings) extends StrictLogging {
   val convertersMap: Map[String, Option[Converter]] = settings.settings.map(s => (s.source, s.sourceConverters)).toMap
   val topicsMap: Map[String, String] = settings.settings.map(s => (s.source, s.target)).toMap
 
+  def commit():Unit = provider.session.commit()
+
   def poll(): Map[Message, SourceRecord] = {
 
     val messages = consumers

@@ -45,18 +45,20 @@ class JMSReaderTest extends TestBase with BeforeAndAfter {
     val tempDir = System.getProperty(property)
     broker.setDataDirectoryFile( new File(tempDir))
     broker.setTmpDataDirectory( new File(tempDir))
-    val messageCount = 10
-
     broker.start()
+
     val connectionFactory = new ActiveMQConnectionFactory()
     connectionFactory.setBrokerURL(brokerUrl)
     val conn = connectionFactory.createConnection()
     conn.start()
-    val session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE)
+    val session = conn.createSession(true, Session.SESSION_TRANSACTED)
     val queue = session.createQueue(QUEUE1)
     val queueProducer = session.createProducer(queue)
+
+    val messageCount = 10
     val messages = getTextMessages(messageCount, session)
     messages.foreach(m => queueProducer.send(m))
+    session.commit()
 
     val props = getProps1Queue(brokerUrl)
     val config = JMSConfig(props)
@@ -88,11 +90,12 @@ class JMSReaderTest extends TestBase with BeforeAndAfter {
     connectionFactory.setBrokerURL(brokerUrl)
     val conn = connectionFactory.createConnection()
     conn.start()
-    val session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE)
+    val session = conn.createSession(true, Session.SESSION_TRANSACTED)
     val avro = session.createQueue(AVRO_QUEUE)
     val avroProducer = session.createProducer(avro)
     val avroMessages = getBytesMessage(messageCount, session)
     avroMessages.foreach(m => avroProducer.send(m))
+    session.commit()
 
     val props = getPropsMixCDIWithConverters(brokerUrl)
     val config = JMSConfig(props)

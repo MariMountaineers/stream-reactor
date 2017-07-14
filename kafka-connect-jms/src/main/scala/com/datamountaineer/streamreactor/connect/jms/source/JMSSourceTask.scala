@@ -17,8 +17,9 @@
 package com.datamountaineer.streamreactor.connect.jms.source
 
 import java.util
-import javax.jms.Message
+import javax.jms.{Message, Session}
 
+import com.datamountaineer.streamreactor.connect.errors.ErrorHandler
 import com.datamountaineer.streamreactor.connect.jms.config.{JMSConfig, JMSConfigConstants, JMSSettings}
 import com.datamountaineer.streamreactor.connect.jms.source.readers.JMSReader
 import com.datamountaineer.streamreactor.connect.utils.ProgressCounter
@@ -27,12 +28,13 @@ import org.apache.kafka.connect.source.{SourceRecord, SourceTask}
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
+import scala.util.Failure
 
 /**
-  * Created by andrew@datamountaineer.com on 10/03/2017. 
+  * Created by andrew@datamountaineer.com on 10/03/2017.
   * stream-reactor
   */
-class JMSSourceTask extends SourceTask with StrictLogging {
+class JMSSourceTask extends SourceTask with StrictLogging with ErrorHandler {
   var reader : JMSReader = _
   val progressCounter = new ProgressCounter
   private var enableProgress: Boolean = false
@@ -41,8 +43,9 @@ class JMSSourceTask extends SourceTask with StrictLogging {
     logger.info(scala.io.Source.fromInputStream(getClass.getResourceAsStream("/jms-source-ascii.txt")).mkString)
     JMSConfig.config.parse(props)
     val config = new JMSConfig(props)
-    val settings = JMSSettings(config, sink = false)
+    val settings = JMSSettings(config, false)
     reader = JMSReader(settings)
+    initialize(settings.retries, settings.errorPolicy)
     enableProgress = config.getBoolean(JMSConfigConstants.PROGRESS_COUNTER_ENABLED)
   }
 
@@ -56,11 +59,15 @@ class JMSSourceTask extends SourceTask with StrictLogging {
     var messages : mutable.Seq[Message] = mutable.Seq.empty[Message]
 
     try {
-       val polled = reader.poll()
-       records = collection.mutable.Seq(polled.map({ case (_, record) =>  record}).toSeq: _*)
-       messages = collection.mutable.Seq(polled.map({ case (message, _) => message}).toSeq: _*)
-    } finally {
-      messages.foreach(m => m.acknowledge())
+      val polled = reader.poll()
+      records = collection.mutable.Seq(polled.map({ case (_, record) =>  record}).toSeq: _*)
+      messages = collection.mutable.Seq(polled.map({ case (message, _) => message}).toSeq: _*)
+      reader.commit()
+    }
+    catch {
+      case t: Throwable =>
+        logger.error(s"There was an error mapping the records ${t.getMessage}", t)
+        handleTry(Failure(t))
     }
 
     if (enableProgress) {
